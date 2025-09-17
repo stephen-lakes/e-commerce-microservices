@@ -1,2 +1,2 @@
 # e-commerce-microservices
-Microservices application for an e-commerce application
+Microservices application for an e-commerce platform 

@@ -1,0 +1,21 @@
+### Get all customers
+GET http://localhost:3001/customers
+Accept: application/json
+
+### Get all products
+GET http://localhost:3002/products
+Accept: application/json
+
+### Place an order
+POST http://localhost:3003/orders
+Content-Type: application/json
+
+{
+  "customerId": "PUT_CUSTOMER_ID_HERE",
+  "productId": "PUT_PRODUCT_ID_HERE",
+  "amount": 1500
+}
+
+### Get transactions (saved by worker)
+GET http://localhost:3004/transactions
+Accept: application/json

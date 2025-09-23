@@ -16,7 +16,7 @@ services:
     networks:
       - app-net
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -40,24 +40,24 @@ services:
       timeout: 10s
       retries: 5
 
-  # customer-service:
-  #   build: ./services/customer-service
-  #   environment:
-  #     MONGO_URL: ${MONGO_URL}
-  #     PORT: ${PORT_CUSTOMER}
-  #   ports:
-  #     - "3001:3001"
-  #   depends_on:
-  #     mongo:
-  #       condition: service_healthy
-  #   networks:
-  #     - app-net
+  customer-service:
+    build: ./services/customer-service
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/ecom
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - app-net
 
   product-service:
     build: ./services/product-service
     environment:
-      MONGO_URL: ${MONGO_URL}
-      PORT: ${PORT_PRODUCT}
+      MONGODB_URI: mongodb://mongo:27017/ecom
+      PORT: 3002
     ports:
       - "3002:3002"
     depends_on:
@@ -66,51 +66,52 @@ services:
     networks:
       - app-net
 
-  # order-service:
-  #   build: ./services/order-service
-  #   environment:
-  #     MONGO_URL: ${MONGO_URL}
-  #     PAYMENT_URL: http://payment-service:${PORT_PAYMENT}
-  #     PRODUCT_URL: http://product-service:${PORT_PRODUCT}
-  #     CUSTOMER_URL: http://customer-service:${PORT_CUSTOMER}
-  #     PORT: ${PORT_ORDER}
-  #   ports:
-  #     - "3003:3003"
-  #   depends_on:
-  #     mongo:
-  #       condition: service_healthy
-  #     customer-service:
-  #       condition: service_started
-  #     product-service:
-  #       condition: service_started
-  #     payment-service:
-  #       condition: service_started
-  #   networks:
-  #     - app-net
+  order-service:
+    build: ./services/order-service
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/ecom
+      PORT: 3003
+      PAYMENT_URL: http://payment-service:3004
+      PRODUCT_URL: http://product-service:3002
+      CUSTOMER_URL: http://customer-service:3001
+    ports:
+      - "3003:3003"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      customer-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+      payment-service:
+        condition: service_started
+    networks:
+      - app-net
 
-  # payment-service:
-  #   build: ./services/payment-service
-  #   environment:
-  #     MONGO_URL: ${MONGO_URL}
-  #     RABBITMQ_URL: ${RABBITMQ_URL}
-  #     PORT: ${PORT_PAYMENT}
-  #   ports:
-  #     - "3004:3004"
-  #   depends_on:
-  #     rabbitmq:
-  #       condition: service_healthy
-  #   networks:
-  #     - app-net
+  payment-service:
+    build: ./services/payment-service
+    environment:
+      PORT: 3004
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      # Only include MongoDB if this service really uses it
+      MONGODB_URI: mongodb://mongo:27017/ecom
+    ports:
+      - "3004:3004"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-net
 
-  # transaction-worker:
-  #   build: ./services/transaction-worker
-  #   environment:
-  #     MONGO_URL: ${MONGO_URL}
-  #     RABBITMQ_URL: ${RABBITMQ_URL}
-  #   depends_on:
-  #     mongo:
-  #       condition: service_healthy
-  #     rabbitmq:
-  #       condition: service_healthy
-  #   networks:
-  #     - app-net
+  transaction-worker:
+    build: ./services/transaction-worker
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/ecom
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-net

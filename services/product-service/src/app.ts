@@ -8,6 +8,7 @@ import errorMiddleware from "./middlewares/error.middleware";
 import { Swagger } from "./swagger";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import cors from "cors";
 
 dotenv.config();
 
@@ -23,10 +24,16 @@ class App {
     this.env = config.env || process.env.ENV || `dev`;
 
     this.initializeDatabase();
-
+    this.initializeMiddlewares();
     this.initializeSwagger();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
+  }
+
+  private initializeMiddlewares(): void {
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
 
     // Custom middleware for request logging
     this.app.use((req: Request, res: Response, next: NextFunction) => {

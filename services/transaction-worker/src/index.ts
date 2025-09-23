@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Transaction, { ITransaction } from "./models/Transaction";
 import { connectRabbitMQ } from "./rabbitmq";
+import Transaction, { ITransaction } from "./models/transaction";
 
 const RABBIT_URL = process.env.RABBITMQ_URL || `amqp://localhost`;
 const QUEUE = `transactions`;

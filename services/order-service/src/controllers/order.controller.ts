@@ -25,7 +25,8 @@ const OrderController = {
         );
       }
 
-      const PRODUCT_URL = process.env.PRODUCT_URL || "http://localhost:3002";
+      const PRODUCT_URL =
+        process.env.PRODUCT_URL || `http://localhost:3002/api/v1`;
       const product = await fetch(`${PRODUCT_URL}/products/${productId}`);
       if (!product.ok)
         return next(
@@ -38,7 +39,8 @@ const OrderController = {
         );
       const prod = await product.json();
 
-      const CUSTOMER_URL = process.env.CUSTOMER_URL || "http://localhost:3001";
+      const CUSTOMER_URL =
+        process.env.CUSTOMER_URL || `http://localhost:3001/api/v1`;
       const cRes = await fetch(`${CUSTOMER_URL}/customers/${customerId}`);
       if (!cRes.ok)
         return next(

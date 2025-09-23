@@ -1,18 +1,18 @@
 ### Get all customers
-GET http://localhost:3001/customers
+GET http://localhost:3001/api/v1/customers
 Accept: application/json
 
 ### Get all products
-GET http://localhost:3002/products
+GET http://localhost:3002/api/v1/products
 Accept: application/json
 
 ### Place an order
-POST http://localhost:3003/orders
+POST http://localhost:3003/api/v1/orders
 Content-Type: application/json
 
 {
-  "customerId": "PUT_CUSTOMER_ID_HERE",
-  "productId": "PUT_PRODUCT_ID_HERE",
+  "customerId": "68d30a7024f63e7f755add6d",
+  "productId": "68d30b7a28812791822b840e",
   "amount": 1500
 }
 

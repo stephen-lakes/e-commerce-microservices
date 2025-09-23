@@ -9,6 +9,8 @@ import { Swagger } from "./swagger";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import cors from "cors";
+import { connectRabbitMQ } from "./config/rabbitmq";
+
 
 dotenv.config();
 
@@ -24,6 +26,7 @@ class App {
     this.env = config.env || process.env.ENV || `dev`;
 
     this.initializeDatabase();
+    this.initializeRabbitMQ();
     this.initializeMiddlewares();
     this.initializeSwagger();
     this.initializeRoutes(routes);
@@ -48,6 +51,14 @@ class App {
     } catch (error) {
       console.error(`Error connecting to the database:`, error);
       process.exit(1);
+    }
+  }
+
+  private async initializeRabbitMQ(): Promise<void> {
+    try {
+      await connectRabbitMQ();
+    } catch (error) {
+      console.error(`Error connecting to rabbitmq:`, error);
     }
   }
 

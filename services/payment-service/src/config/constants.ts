@@ -1,5 +1,5 @@
 export const v1Base = `/api/v1/`;
-export const AppName = `Order Service`;
+export const AppName = `Payment Service`;
 
 export const STATUS_SUCCESS = `success`;
 export const STATUS_ERROR = `error`;

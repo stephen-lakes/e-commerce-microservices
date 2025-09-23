@@ -1,6 +1,6 @@
 import App from "./app";
-import { OrderRoute } from "./routes/order";
+import { PaymentRoute } from "./routes/payment";
 
-const app = new App([OrderRoute]);
+const app = new App([PaymentRoute]);
 
 app.listen();

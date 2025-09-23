@@ -11,12 +11,18 @@ const OrderController = {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const customers = await OrderService.createOrder();
+      const { customerId, productId, amount } = req.body;
+      const order = await OrderService.createOrder({
+        customerId,
+        productId,
+        amount,
+      });
+
       sendResponse(res, {
         status: STATUS_SUCCESS,
-        message: `customers`,
+        message: `order`,
         code: 200,
-        data: customers,
+        data: order,
       });
     } catch (error) {
       next(error);
@@ -29,23 +35,23 @@ const OrderController = {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const customer = await OrderService.fetchOrderById(req.params.id);
+      const order = await OrderService.fetchOrderById(req.params.id);
 
-      if (!customer)
+      if (!order)
         return next(
           new HttpException(
             404,
             STATUS_ERROR,
-            `customer with the ID ${req.params.id} not found`,
+            `order with the ID ${req.params.id} not found`,
             ERROR_CODES.ERR_CODE_404
           )
         );
 
       sendResponse(res, {
         status: STATUS_SUCCESS,
-        message: `customer`,
+        message: `order`,
         code: 200,
-        data: customer,
+        data: order,
       });
     } catch (error) {
       next(error);

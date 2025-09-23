@@ -11,6 +11,7 @@ export const OrderRoute = Utility.swaggerRouteToAppRoute({
       method: `post`,
       handlerName: `createOrder`,
       description: `create an order`,
+      sampleRequestData: OrderSample.create,
       sampleResponseData: responseFormatter(OrderSample.order),
     },
     {

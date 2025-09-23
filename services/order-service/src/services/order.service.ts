@@ -1,3 +1,4 @@
+import { IOrder } from "../interfaces/order.interface";
 import Order from "../models/order.model";
 
 export class OrderService {
@@ -5,7 +6,7 @@ export class OrderService {
     return await Order.findOne({ _id: id });
   }
 
-  static async createOrder() {
-    return await Order.find();
+  static async createOrder(orderData: any) {
+    return await Order.create(orderData);
   }
 }

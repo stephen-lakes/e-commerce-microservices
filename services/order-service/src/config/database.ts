@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import config from "./env";
-import Customer from "../models/order.model";
 
 async function connectToMongoDBAtlas() {
   const uri: string = config.mongodbUri || ``;
@@ -12,12 +11,6 @@ async function connectToMongoDBAtlas() {
   try {
     await mongoose.connect(uri);
     console.log(`✅ Database Connected Successfully`);
-
-    await Customer.deleteMany({});
-
-    const p1 = await Customer.create({
-      name: `John Doe`,
-    });
   } catch (error) {
     console.log(`Database Connection Error!!`, error);
     process.exit(1);

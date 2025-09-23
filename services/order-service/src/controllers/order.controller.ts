@@ -3,6 +3,7 @@ import { OrderService } from "../services/order.service";
 import { sendResponse } from "../utils/utilities";
 import { ERROR_CODES, STATUS_ERROR, STATUS_SUCCESS } from "../config/constants";
 import { HttpException } from "../exceptions/http.exception";
+import { makePayment } from "../clients/payment.client";
 
 const OrderController = {
   createOrder: async (
@@ -25,8 +26,8 @@ const OrderController = {
       }
 
       const PRODUCT_URL = process.env.PRODUCT_URL || "http://localhost:3002";
-      const p = await fetch(`${PRODUCT_URL}/products/${productId}`);
-      if (!p.ok)
+      const product = await fetch(`${PRODUCT_URL}/products/${productId}`);
+      if (!product.ok)
         return next(
           new HttpException(
             404,
@@ -35,7 +36,7 @@ const OrderController = {
             ERROR_CODES.ERR_CODE_400
           )
         );
-      const prod = await p.json();
+      const prod = await product.json();
 
       const CUSTOMER_URL = process.env.CUSTOMER_URL || "http://localhost:3001";
       const cRes = await fetch(`${CUSTOMER_URL}/customers/${customerId}`);
@@ -54,6 +55,21 @@ const OrderController = {
         productId,
         amount,
       });
+
+      const paymentRes = await makePayment({
+        customerId,
+        orderId: order._id.toString(),
+        productId,
+        amount,
+      });
+
+      if (paymentRes.success) {
+        order.orderStatus = `paid`;
+        await order.save();
+      } else {
+        order.orderStatus = `failed`;
+        await order.save();
+      }
 
       sendResponse(res, {
         status: STATUS_SUCCESS,

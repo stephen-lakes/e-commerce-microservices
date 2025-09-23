@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const PAYMENT_URL = process.env.PAYMENT_URL || "http://localhost:3004";
+const PAYMENT_URL = process.env.PAYMENT_URL || `http://localhost:3004/api/v1`;
 
 export const makePayment = async ({
   customerId,
@@ -10,7 +10,7 @@ export const makePayment = async ({
 }: any) => {
   try {
     const res = await fetch(`${PAYMENT_URL}/payments`, {
-      method: "POST",
+      method: `POST`,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ customerId, orderId, productId, amount }),
     });
@@ -21,7 +21,7 @@ export const makePayment = async ({
     }
 
     const data = await res.json();
-    return data; // { success: true, transaction: {...} }
+    return data;
   } catch (error) {
     console.error(error);
   }

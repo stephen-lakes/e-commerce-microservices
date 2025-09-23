@@ -17,5 +17,5 @@ Content-Type: application/json
 }
 
 ### Get transactions (saved by worker)
-GET http://localhost:3004/transactions
+GET http://localhost:3004/api/v1/transactions
 Accept: application/json

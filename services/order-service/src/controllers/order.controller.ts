@@ -28,6 +28,7 @@ const OrderController = {
       const PRODUCT_URL =
         process.env.PRODUCT_URL || `http://localhost:3002/api/v1`;
       const product = await fetch(`${PRODUCT_URL}/products/${productId}`);
+
       if (!product.ok)
         return next(
           new HttpException(
@@ -42,6 +43,7 @@ const OrderController = {
       const CUSTOMER_URL =
         process.env.CUSTOMER_URL || `http://localhost:3001/api/v1`;
       const cRes = await fetch(`${CUSTOMER_URL}/customers/${customerId}`);
+
       if (!cRes.ok)
         return next(
           new HttpException(
@@ -58,14 +60,14 @@ const OrderController = {
         amount,
       });
 
-      const paymentRes = await makePayment({
+      const paymentRes = (await makePayment({
         customerId,
         orderId: order._id.toString(),
         productId,
         amount,
-      });
+      })) as any;
 
-      if (paymentRes.success) {
+      if (paymentRes.status === `success`) {
         order.orderStatus = `paid`;
         await order.save();
       } else {

@@ -12,6 +12,43 @@ const OrderController = {
   ): Promise<void> => {
     try {
       const { customerId, productId, amount } = req.body;
+
+      if (!customerId || !productId) {
+        return next(
+          new HttpException(
+            400,
+            STATUS_ERROR,
+            `customerId and productId required`,
+            ERROR_CODES.ERR_CODE_400
+          )
+        );
+      }
+
+      const PRODUCT_URL = process.env.PRODUCT_URL || "http://localhost:3002";
+      const p = await fetch(`${PRODUCT_URL}/products/${productId}`);
+      if (!p.ok)
+        return next(
+          new HttpException(
+            404,
+            STATUS_ERROR,
+            `product not found`,
+            ERROR_CODES.ERR_CODE_400
+          )
+        );
+      const prod = await p.json();
+
+      const CUSTOMER_URL = process.env.CUSTOMER_URL || "http://localhost:3001";
+      const cRes = await fetch(`${CUSTOMER_URL}/customers/${customerId}`);
+      if (!cRes.ok)
+        return next(
+          new HttpException(
+            404,
+            STATUS_ERROR,
+            `customer not found`,
+            ERROR_CODES.ERR_CODE_400
+          )
+        );
+
       const order = await OrderService.createOrder({
         customerId,
         productId,

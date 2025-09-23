@@ -1,0 +1,116 @@
+networks:
+  app-net:
+
+volumes:
+  mongo_data:
+  rabbitmq_data:
+
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # customer-service:
+  #   build: ./services/customer-service
+  #   environment:
+  #     MONGO_URL: ${MONGO_URL}
+  #     PORT: ${PORT_CUSTOMER}
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-net
+
+  product-service:
+    build: ./services/product-service
+    environment:
+      MONGO_URL: ${MONGO_URL}
+      PORT: ${PORT_PRODUCT}
+    ports:
+      - "3002:3002"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - app-net
+
+  # order-service:
+  #   build: ./services/order-service
+  #   environment:
+  #     MONGO_URL: ${MONGO_URL}
+  #     PAYMENT_URL: http://payment-service:${PORT_PAYMENT}
+  #     PRODUCT_URL: http://product-service:${PORT_PRODUCT}
+  #     CUSTOMER_URL: http://customer-service:${PORT_CUSTOMER}
+  #     PORT: ${PORT_ORDER}
+  #   ports:
+  #     - "3003:3003"
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #     customer-service:
+  #       condition: service_started
+  #     product-service:
+  #       condition: service_started
+  #     payment-service:
+  #       condition: service_started
+  #   networks:
+  #     - app-net
+
+  # payment-service:
+  #   build: ./services/payment-service
+  #   environment:
+  #     MONGO_URL: ${MONGO_URL}
+  #     RABBITMQ_URL: ${RABBITMQ_URL}
+  #     PORT: ${PORT_PAYMENT}
+  #   ports:
+  #     - "3004:3004"
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-net
+
+  # transaction-worker:
+  #   build: ./services/transaction-worker
+  #   environment:
+  #     MONGO_URL: ${MONGO_URL}
+  #     RABBITMQ_URL: ${RABBITMQ_URL}
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-net

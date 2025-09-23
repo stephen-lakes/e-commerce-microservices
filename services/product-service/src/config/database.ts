@@ -25,8 +25,6 @@ async function connectToMongoDBAtlas() {
       price: 102.99,
       stock: 50,
     });
-
-    console.log(`Seeded products`, p1, p2);
   } catch (error) {
     console.log(`Database Connection Error!!`, error);
     process.exit(1);

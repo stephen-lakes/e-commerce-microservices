@@ -19,7 +19,7 @@ class App {
 
   constructor(routes: express.Router[]) {
     this.app = express();
-    this.PORT = config.port || process.env.PORT || 3000;
+    this.PORT = config.port || process.env.PORT || 3002;
     this.env = config.env || process.env.ENV || `dev`;
 
     this.initializeDatabase();
@@ -69,12 +69,7 @@ class App {
             },
             servers: [
               {
-                url:
-                  config.env === `dev`
-                    ? `http://localhost:${this.PORT}${this.BASE_URL}`
-                    : config.env === `test`
-                    ? `https://tellbuyers-auth-service.onrender.com${this.BASE_URL}`
-                    : `https://tellbuyers-auth-service.onrender.com${this.BASE_URL}`,
+                url: `http://localhost:${this.PORT}${this.BASE_URL}`,
                 description: `${config.env}`,
               },
             ],

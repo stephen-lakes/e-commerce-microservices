@@ -18,7 +18,14 @@ export const ProductRoute = Utility.swaggerRouteToAppRoute({
       method: `get`,
       handlerName: `getProductById`,
       description: `Retreive a single products by id`,
-      sampleRequestData: ProductSample.product,
+      parameters: [
+        {
+          name: `id`,
+          in: `path`,
+          required: true,
+          schema: { type: `string`, example: `68d256de4a655ecc61fdbaf6` },
+        },
+      ],
       sampleResponseData: responseFormatter(ProductSample.product),
     },
   ],

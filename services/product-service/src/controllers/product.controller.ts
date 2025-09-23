@@ -10,14 +10,13 @@ const ProductController = {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const product = await ProductService.getProductById(req.params.id);
-
-      if (!product)
-        sendResponse(res, {
-          status: STATUS_ERROR,
-          message: `product not found`,
-          code: 404,
-        });
+      const products = await ProductService.getAllProducts();
+      sendResponse(res, {
+        status: STATUS_SUCCESS,
+        message: `products`,
+        code: 200,
+        data: products,
+      });
     } catch (error) {
       next(error);
     }
@@ -29,13 +28,14 @@ const ProductController = {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const products = await ProductService.getAllProducts();
-      sendResponse(res, {
-        status: STATUS_SUCCESS,
-        message: `products`,
-        code: 200,
-        data: products,
-      });
+      const product = await ProductService.getProductById(req.params.id);
+
+      if (!product)
+        sendResponse(res, {
+          status: STATUS_ERROR,
+          message: `product not found`,
+          code: 404,
+        });
     } catch (error) {
       next(error);
     }

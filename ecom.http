@@ -11,8 +11,8 @@ POST http://localhost:3003/api/v1/orders
 Content-Type: application/json
 
 {
-  "customerId": "68d30a7024f63e7f755add6d",
-  "productId": "68d30b7a28812791822b840e",
+  "customerId": "68d3b93a4990abbfdf56aa3c",
+  "productId": "68d3b9a82e1f1d4988cc6771",
   "amount": 1500
 }
 

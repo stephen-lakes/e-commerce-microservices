@@ -71,9 +71,9 @@ services:
     environment:
       MONGODB_URI: mongodb://mongo:27017/ecom
       PORT: 3003
-      PAYMENT_URL: http://payment-service:3004
-      PRODUCT_URL: http://product-service:3002
-      CUSTOMER_URL: http://customer-service:3001
+      PAYMENT_URL: http://payment-service:3004/api/v1
+      PRODUCT_URL: http://product-service:3002/api/v1
+      CUSTOMER_URL: http://customer-service:3001/api/v1
     ports:
       - "3003:3003"
     depends_on:

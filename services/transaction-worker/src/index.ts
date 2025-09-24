@@ -4,7 +4,7 @@ import Transaction, { ITransaction } from "./models/transaction";
 
 const RABBIT_URL = process.env.RABBITMQ_URL || `amqp://localhost`;
 const QUEUE = `transactions`;
-const MONGO_URI = process.env.MONGODB_URI || `mongodb://mongo:27017/ecom`;
+const MONGO_URI = process.env.MONGODB_URI || `mongodb://localhost:27017/ecom`;
 
 async function startWorker(): Promise<void> {
   try {

@@ -1,3 +1,19 @@
+### Sign up
+POST http://localhost:3000/api/v1/auth/sign-up
+Content-Type: application/json
+
+{
+  "email": "janedoe@email.com",
+  "username": "JaneDoe",
+  "password": "passcode",
+  "firstname": "Jane",
+  "lastname": "Doe",
+  "middlename": "Anna",
+  "dateOfBirth": "2025-09-27T04:24:08.577Z",
+  "signInType": "default"
+}
+
+
 ### Get all customers
 GET http://localhost:3001/api/v1/customers
 Accept: application/json
@@ -13,7 +29,7 @@ Content-Type: application/json
 {
   "customerId": "68d3b93a4990abbfdf56aa3c",
   "productId": "68d3b9a82e1f1d4988cc6771",
-  "amount": 1500
+  "amount": 10
 }
 
 ### Get transactions (saved by worker)

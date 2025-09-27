@@ -40,6 +40,22 @@ services:
       timeout: 10s
       retries: 5
 
+  auth-service:
+    build: ./services/auth-service
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/ecom
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      PORT: 3000
+      JWT_SECRET: X7pL9qW3zT2rY6mB8nK4
+      JWT_REFRESH_SECRET: eV3awjQ34r0pM8UbjA2u
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - app-net
+
   customer-service:
     build: ./services/customer-service
     environment:
@@ -93,8 +109,6 @@ services:
     environment:
       PORT: 3004
       RABBITMQ_URL: amqp://rabbitmq:5672
-      # Only include MongoDB if this service really uses it
-      MONGODB_URI: mongodb://mongo:27017/ecom
     ports:
       - "3004:3004"
     depends_on:

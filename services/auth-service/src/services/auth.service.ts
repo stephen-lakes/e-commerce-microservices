@@ -2,10 +2,10 @@ import { HttpException } from "../exceptions/http.exception";
 import UserService from "./user.service";
 import bcrypt from "bcrypt";
 
+const userService = new UserService();
+
 export default class AuthService {
   public async signup(signupData: Record<string, any>) {
-    console.log("signupData +>>>", signupData);
-
     const {
       email,
       username,
@@ -17,7 +17,6 @@ export default class AuthService {
       signInType,
     } = signupData;
 
-    const userService = new UserService();
     const existingUser = await userService.checkUserExists(username, email);
     if (existingUser) {
       throw new HttpException(
@@ -51,11 +50,7 @@ export default class AuthService {
   }) {
     const { email, username, password } = signinData;
 
-    const user = await new UserService().getUserByIdentifier(
-      email,
-      username,
-      true
-    );
+    const user = await userService.getUserByIdentifier(email, username, true);
 
     if (!user) {
       throw new HttpException(
@@ -90,7 +85,7 @@ export default class AuthService {
 
   public async resetPassword(email: string, newPassword: string) {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    const user = await new UserService().update(email, {
+    const user = await userService.update(email, {
       password: hashedPassword,
     });
 

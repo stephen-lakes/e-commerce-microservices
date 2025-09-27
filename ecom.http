@@ -1,3 +1,6 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDc2OWNjMjYxN2Q4NmQyOTg4YWM5MCIsImVtYWlsIjoiamFuZWRvZUBlbWFpbC5jb20iLCJ1c2VybmFtZSI6IkphbmVEb2UiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1ODk0OTE5MCwiZXhwIjoxNzU4OTUyNzkwfQ.7a2nStmGcHh3SafEfSYfb-LcVhNDaq5Rl0MSWMNGoYc
+
+
 ### Sign up
 POST http://localhost:3000/api/v1/auth/sign-up
 Content-Type: application/json
@@ -12,6 +15,19 @@ Content-Type: application/json
   "dateOfBirth": "2025-09-27T04:24:08.577Z",
   "signInType": "default"
 }
+### Sign in
+POST http://localhost:3000/api/v1/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "janedoe@email.com",
+  "password": "passcode"
+}
+
+### me
+GET http://localhost:3000/api/v1/users/user/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 
 ### Get all customers

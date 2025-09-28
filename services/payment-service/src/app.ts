@@ -3,14 +3,12 @@ import { AppName } from "./config/constants";
 import express, { Application, Request, Response, NextFunction } from "express";
 import config from "./config/env";
 import { unknownEndpoint } from "./middlewares/unknownEndpoint";
-import connectToMongoDBAtlas from "./config/database";
 import errorMiddleware from "./middlewares/error.middleware";
 import { Swagger } from "./swagger";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import cors from "cors";
 import { connectRabbitMQ } from "./config/rabbitmq";
-
 
 dotenv.config();
 
@@ -47,7 +45,7 @@ class App {
 
   private async initializeDatabase(): Promise<void> {
     try {
-      await connectToMongoDBAtlas();
+      // await connectToMongoDBAtlas();
     } catch (error) {
       console.error(`Error connecting to the database:`, error);
       process.exit(1);

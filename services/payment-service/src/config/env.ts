@@ -3,7 +3,6 @@ dotenv.config();
 
 const config = {
   port: parseInt(process.env.PORT || `3003`, 10),
-  mongodbUri: process.env.MONGODB_URI,
   rabbitmqUrl: process.env.RABBITMQ_URL,
 
   apiHost: `${process.env.DEV_HOST}:${process.env.PORT}/v1`,

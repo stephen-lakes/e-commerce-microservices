@@ -1,4 +1,5 @@
 import OrderController from "../controllers/order.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 import { OrderSample } from "../samples/order.sample";
 import { responseFormatter, Utility } from "../utils/utilities";
 
@@ -11,6 +12,7 @@ export const OrderRoute = Utility.swaggerRouteToAppRoute({
       method: `post`,
       handlerName: `createOrder`,
       description: `create an order`,
+      middlewares: [authMiddleware],
       sampleRequestData: OrderSample.create,
       sampleResponseData: responseFormatter(OrderSample.order),
     },
@@ -27,6 +29,7 @@ export const OrderRoute = Utility.swaggerRouteToAppRoute({
           schema: { type: `string`, example: `68d256de4a655ecc61fdbaf6` },
         },
       ],
+      middlewares: [authMiddleware],
       sampleResponseData: responseFormatter(OrderSample.order),
     },
   ],

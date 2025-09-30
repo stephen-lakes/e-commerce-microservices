@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import axios from "axios";
 
 const PAYMENT_URL = process.env.PAYMENT_URL || `http://localhost:3004/api/v1`;
 
@@ -9,20 +9,18 @@ export const makePayment = async ({
   amount,
 }: any) => {
   try {
-    const res = await fetch(`${PAYMENT_URL}/payments`, {
-      method: `POST`,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customerId, orderId, productId, amount }),
+    const res = await axios.post(`${PAYMENT_URL}/payments`, {
+      customerId,
+      orderId,
+      productId,
+      amount,
     });
 
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Payment Service error ${res.status}: ${text}`);
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error(error);
+    return res.data;
+  } catch (error: any) {
+    console.error(
+      `Payment Service error ${error.response?.status}: ${error.response?.data}`
+    );
+    throw error;
   }
 };
